@@ -14,6 +14,10 @@ jobs:
         with:
           go-version: '1.19.5'
       - uses: actions/checkout@v2
+
+      - name: Run Test
+        run: go test -gcflags=-l ./...  
+        
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
@@ -46,5 +50,5 @@ jobs:
         with:
           distribution: goreleaser
           version: v1.4.1
-          args: build --snapshot --single-target --rm-dist
+          args: build --snapshot --single-target --rm-dist  
             
