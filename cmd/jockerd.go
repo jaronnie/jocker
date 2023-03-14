@@ -6,8 +6,9 @@ Copyright © 2023 jaronnie <jaron@jaronnie.com>
 package cmd
 
 import (
-	"github.com/jaronnie/jocker/jockerd"
 	"github.com/spf13/cobra"
+
+	"github.com/jaronnie/jocker/jockerd"
 )
 
 // jockerdCmd represents the jockerd command
@@ -21,9 +22,7 @@ var jockerdCmd = &cobra.Command{
 		}()
 
 		go func() {
-			if err := jockerd.StartJockerdGatewayServer(); err != nil {
-				panic(err)
-			}
+			jockerd.StartJockerdGatewayServer()
 		}()
 
 		select {}

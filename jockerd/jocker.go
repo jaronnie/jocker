@@ -3,23 +3,26 @@ package jockerd
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	adapter "github.com/gwatts/gin-adapter"
+	"github.com/spf13/viper"
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/core/service"
+	"github.com/zeromicro/go-zero/zrpc"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/reflection"
+
 	"github.com/jaronnie/jocker/jockerd/internal/config"
 	"github.com/jaronnie/jocker/jockerd/internal/router"
 	"github.com/jaronnie/jocker/jockerd/internal/server"
 	"github.com/jaronnie/jocker/jockerd/internal/svc"
 	"github.com/jaronnie/jocker/jockerd/jockerdpb"
-	"github.com/spf13/viper"
-
-	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/core/service"
-	"github.com/zeromicro/go-zero/zrpc"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 func StartJockerdZrpcServer(configFile string) {
@@ -40,15 +43,26 @@ func StartJockerdZrpcServer(configFile string) {
 	s.Start()
 }
 
-func StartJockerdGatewayServer() error {
+func StartJockerdGatewayServer() {
 	mux := runtime.NewServeMux()
 
 	httpAddress := viper.GetString("ListenOnHTTP")
 	grpcAddress := viper.GetString("ListenOn")
+	sock := viper.GetString("ListenOnSocket")
 
-	opts := []grpc.DialOption{grpc.WithInsecure()}
+	if httpAddress == "" {
+		httpAddress = "0.0.0.0:8090"
+	}
+	if grpcAddress == "" {
+		grpcAddress = "0.0.0.0:9603"
+	}
+	if sock == "" {
+		sock = "/var/run/jocker.sock"
+	}
+
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	if err := jockerdpb.RegisterJockerdHandlerFromEndpoint(context.Background(), mux, grpcAddress, opts); err != nil {
-		return err
+		panic(err)
 	}
 
 	g := gin.New()
@@ -67,7 +81,15 @@ func StartJockerdGatewayServer() error {
 		Addr:    httpAddress,
 		Handler: g,
 	}
-
 	fmt.Printf("Starting http server at %s...\n", httpAddress)
-	return s.ListenAndServe()
+	go s.ListenAndServe()
+
+	// unix socket server
+	os.Remove(sock)
+	fmt.Printf("Starting unix socket server at %s...\n", sock)
+	unixListener, err := net.Listen("unix", sock)
+	if err != nil {
+		panic(err)
+	}
+	go http.Serve(unixListener, g)
 }
