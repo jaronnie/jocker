@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jaronnie/jocker/jockerd/internal/svc"
-	"github.com/jaronnie/jocker/jockerd/jockerd"
+	"github.com/jaronnie/jocker/jockerd/jockerdpb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +23,8 @@ func NewContainerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Contain
 	}
 }
 
-func (l *ContainerLogic) Container(in *jockerd.Empty) (*jockerd.Container, error) {
+func (l *ContainerLogic) Container(in *jockerdpb.Empty) (*jockerdpb.Container, error) {
 	// todo: add your logic here and delete this line
 
-	return &jockerd.Container{}, nil
+	return &jockerdpb.Container{}, nil
 }

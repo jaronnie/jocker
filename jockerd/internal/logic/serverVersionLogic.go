@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jaronnie/jocker/jockerd/internal/svc"
-	"github.com/jaronnie/jocker/jockerd/jockerd"
+	"github.com/jaronnie/jocker/jockerd/jockerdpb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +23,6 @@ func NewServerVersionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ser
 	}
 }
 
-func (l *ServerVersionLogic) ServerVersion(in *jockerd.Empty) (*jockerd.ServerVersionResponse, error) {
-	// todo: add your logic here and delete this line
-
-	return &jockerd.ServerVersionResponse{}, nil
+func (l *ServerVersionLogic) ServerVersion(in *jockerdpb.Empty) (*jockerdpb.ServerVersionResponse, error) {
+	return &jockerdpb.ServerVersionResponse{Version: "beta testing!"}, nil
 }
