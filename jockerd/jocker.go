@@ -82,7 +82,12 @@ func StartJockerdGatewayServer() {
 		Handler: g,
 	}
 	fmt.Printf("Starting http server at %s...\n", httpAddress)
-	go s.ListenAndServe()
+	go func() {
+		if err := s.ListenAndServe(); err != nil {
+			panic(err)
+		}
+
+	}()
 
 	// unix socket server
 	os.Remove(sock)
@@ -91,5 +96,9 @@ func StartJockerdGatewayServer() {
 	if err != nil {
 		panic(err)
 	}
-	go http.Serve(unixListener, g)
+	go func() {
+		if err := http.Serve(unixListener, g); err != nil {
+			panic(err)
+		}
+	}()
 }
