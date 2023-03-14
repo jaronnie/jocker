@@ -40,3 +40,11 @@ jobs:
 
           # optionally use a specific version of Go rather than the latest one
           go_version: '1.19.5'
+          
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          distribution: goreleaser
+          version: v1.4.1
+          args: build --snapshot --single-target --rm-dist
+            
