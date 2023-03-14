@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"github.com/jaronnie/jocker/jockerd/internal/svc"
 	"github.com/jaronnie/jocker/jockerd/jockerdpb"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ServerVersionLogic struct {

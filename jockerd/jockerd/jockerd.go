@@ -6,10 +6,10 @@ package jockerd
 import (
 	"context"
 
-	"github.com/jaronnie/jocker/jockerd/jockerdpb"
-
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
+
+	"github.com/jaronnie/jocker/jockerd/jockerdpb"
 )
 
 type (
