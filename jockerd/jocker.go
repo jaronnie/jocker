@@ -86,7 +86,6 @@ func StartJockerdGatewayServer() {
 		if err := s.ListenAndServe(); err != nil {
 			panic(err)
 		}
-
 	}()
 
 	// unix socket server
