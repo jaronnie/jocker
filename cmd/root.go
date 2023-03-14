@@ -8,6 +8,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -62,6 +63,8 @@ func initConfig() {
 		// Find home directory.
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
+
+		cfgFile = filepath.Join(home, ".jocker.yaml")
 
 		// Search config in home directory with name ".jocker" (without extension).
 		viper.AddConfigPath(home)
