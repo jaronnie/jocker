@@ -22,3 +22,6 @@ tasks:
     cmds:
       - goreleaser release --rm-dist
     silent: true
+  httpsdk:
+    cmds:
+    - ./scripts/httpsdk.sh debug
