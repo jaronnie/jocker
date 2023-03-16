@@ -1,0 +1,3 @@
+sdkDir = "pkg/client"
+isWarpHttpResponse = false # if warped code,data,message, set this env to true
+isResourceExpansionCreateOrUpdate = true # you can set this env to run once, then set this env to false
